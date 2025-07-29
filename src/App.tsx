@@ -98,7 +98,7 @@ const App: React.FC = () => {
     console.log('Sending quiz data to Make.com:', JSON.stringify(webhookData, null, 2));
     
     // Send data to Make.com webhook
-    fetch('https://hook.us2.make.com/536tl6190q6wqw8fvs92kqmpdi8rye1q', {
+    fetch('https://hook.us2.make.com/ngsaf6xny31vpii27pddxxcqjc8vyts7', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
