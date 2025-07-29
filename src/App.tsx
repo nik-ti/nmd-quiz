@@ -7,6 +7,7 @@ import ProgressBar from './components/ProgressBar';
 import { QuizState, Question } from './types/quiz';
 import { workQuestions, businessQuestions } from './data/questions';
 import { calculateScore, getRecommendedVisas } from './utils/visaLogic';
+import { visaDescriptions } from './data/visaDescriptions';
 import { Briefcase, Rocket } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -85,10 +86,34 @@ const App: React.FC = () => {
     const score = calculateScore(quizState.answers, questions);
     const visas = getRecommendedVisas(quizState.path!, quizState.answers);
     
+    // Format questions and answers for CRM
+    const currentQuestions = getCurrentQuestions();
+    let formattedResults = 'Результаты теста:\n\n';
+    
+    currentQuestions.forEach(question => {
+      const userAnswer = quizState.answers[question.id];
+      if (userAnswer) {
+        const selectedOption = question.options.find(option => option.value === userAnswer);
+        if (selectedOption) {
+          formattedResults += `Вопрос: ${question.text}\n`;
+          formattedResults += `Ответ: ${selectedOption.text}\n\n`;
+        }
+      }
+    });
+    
+    formattedResults += `Вероятность получения визы составляет: ${score}%\n\n`;
+    
+    formattedResults += 'Подходящие визы:\n';
+    visas.forEach(visa => {
+      const description = visaDescriptions[visa] || visa;
+      formattedResults += `${description}\n`;
+    });
+    
     // Send data to Make.com webhook
     const webhookData = {
       contactInfo: quizState.contactInfo,
-      answers: quizState.answers,
+      formattedResults,
+      rawAnswers: quizState.answers,
       score,
       visas,
       path: quizState.path!
