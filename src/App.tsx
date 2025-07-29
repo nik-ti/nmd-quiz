@@ -90,6 +90,11 @@ const App: React.FC = () => {
     const currentQuestions = getCurrentQuestions();
     let formattedResults = 'Результаты теста:\n\n';
     
+    // Add path selection question and answer
+    const pathAnswer = quizState.path === 'work' ? 'Работа по найму' : 'Развитие бизнеса';
+    formattedResults += `Вопрос: Какова ваша основная цель?\n`;
+    formattedResults += `Ответ: ${pathAnswer}\n\n`;
+    
     currentQuestions.forEach(question => {
       const userAnswer = quizState.answers[question.id];
       if (userAnswer) {
